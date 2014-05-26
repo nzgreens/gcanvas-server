@@ -10,7 +10,7 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": "gcanvas",
-        "USER": "",
+        "USER": get_env_variable(""),
         "PASSWORD": "",
         "HOST": "localhost",
         "PORT": "",

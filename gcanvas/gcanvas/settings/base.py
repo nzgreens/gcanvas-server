@@ -8,7 +8,19 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
+import os
+
+from django.core.exceptions import ImproperlyConfigured
 from unipath import Path
+
+def get_env_variable(var_name):
+    """get the environment variable or return exception"""
+    try:
+        return os.environ.get(var_name)
+    except KeyError:
+        error_msg = "Set the %s environment variable" % (var_name)
+        raise ImproperlyConfigured(error_msg)
+
 
 BASE_DIR = Path(__file__).ancestor(3)
 MEDIA_ROOT = BASE_DIR.child('media')
@@ -25,15 +37,12 @@ TEMPLATE_DIRS = (
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'yzao_xm(qu7&bce6cp=$x9hh3ky*3ta%-h)q%l(a@lyqys4(s*'
-
-# SECURITY WARNING: don't run with debug turned on in production!
+SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
 
 ALLOWED_HOSTS = []
 
 
 # Application definition
-
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
