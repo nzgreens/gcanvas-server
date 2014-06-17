@@ -1,25 +1,17 @@
 #settings/local.py
 from .base import *
-import dj_database_url
 
 #DATABASE_URL=postgres://postgres:<standardbynamepasswordhere>@localhost:5432/gcanvas
 #DJANGO_SETTINGS_MODULE=gcanvas.settings.local
 #DJANGO_SECRET_KEY=`generate_secret_key.sh`
 
-DATABASES = {
-    "default": dj_database_url.config()
-}
 
-
-
-# Honor the 'X-Forwarded-Proto' header for request.is_secure()
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-# Allow all host headers
-ALLOWED_HOSTS = ['*']
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+
+#overcomes the not configured bug
+DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 

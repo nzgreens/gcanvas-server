@@ -1,0 +1,24 @@
+{"results": [
+{% for person in people %}
+    {
+        "id": {{ person.nation_id }},
+        "first_name": "{{ person.first_name }}",
+        "last_name": "{{ person.last_name }}",
+        "occupation": "{{ person.occupation }}",
+        "sex": "{{ person.sex }}",
+        "birthdate": {% if person.birthdate %}"{{ person.birthdate|date:"Y-m-d" }}"{% else %}{% now "Y-m-d" %}{% endif %},
+        "note": "{{ person.note }}",
+        "email": "{{ person.email }}",
+        "phone": "{{ person.phone }}",
+        "primary_address" : {
+            "address1": "{{ person.primary_address.address1 }}",
+            "address2": "{{ person.primary_address.address2 }}",
+            "address3": "{{ person.primary_address.address3 }}",
+            "city": "{{ person.primary_address.city }}",
+            "zip": "{{ person.primary_address.zip }}",
+            "lat": "{{ person.primary_address.lat }}",
+            "lng": "{{ person.primary_address.lng }}"
+        }
+    }{% if not forloop.last %},{% endif %}
+{% endfor %}
+]}

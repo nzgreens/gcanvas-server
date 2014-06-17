@@ -4,3 +4,5 @@ South==0.8.4
 Unipath==1.0
 dj-database-url==0.3.0
 django-toolbelt==0.0.1
+django-oauth-toolkit==0.7.1
+git+https://github.com/terrasea/requests.git

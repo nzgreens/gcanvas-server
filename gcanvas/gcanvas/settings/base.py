@@ -12,6 +12,19 @@ import os
 
 from django.core.exceptions import ImproperlyConfigured
 from unipath import Path
+import dj_database_url
+
+DATABASES = {
+    "default": dj_database_url.config()
+}
+
+
+
+# Honor the 'X-Forwarded-Proto' header for request.is_secure()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Allow all host headers
+ALLOWED_HOSTS = ['*']
 
 def get_env_variable(var_name):
     """get the environment variable or return exception"""
@@ -27,6 +40,7 @@ MEDIA_ROOT = BASE_DIR.child('media')
 STATIC_ROOT = BASE_DIR.child('static')
 STATICFILES_DIRS = (
     BASE_DIR.child('assets'),
+    BASE_DIR.child('build').child('web'),
 )
 
 TEMPLATE_DIRS = (
@@ -39,6 +53,12 @@ TEMPLATE_DIRS = (
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
 
+TWITTER_CLIENT_ID='lz3KLlOaekxeuRkngh0V9BdLZ'
+TWITTER_CLIENT_SECRET='8AHFZo1KEfXh7v4r4SHnT67kOdSFMJAI7iHR78U6wSQBA8gmZ5'
+
+
+USER_REGISTER_URL='/'
+
 ALLOWED_HOSTS = []
 
 
@@ -50,6 +70,13 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'oauth2_provider',
+    'static_server',
+    'json_handler',
+    'twitter_authenticate',
+    'email_verification',
+    'gcanvas_user',
+    'nationbuilder_connect',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -84,3 +111,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+AUTHENTICATION_BACKENDS = (
+    # ... your other backends
+    #'twitter_authenticate.auth_backend.TwitterAuthBackend',
+    'nationbuilder_connect.auth_backend.NationBuilderAuthBackend',
+)
