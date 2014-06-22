@@ -6,8 +6,8 @@ from django.conf.urls import patterns, include, url
 from . import views
 
 urlpatterns = patterns('',
-                       url('^$', views.NationBuilderConnectView.as_view(), name="nationbuilder"),
-                       url('callback', views.NationBuilderConnectView.as_view(), name="nationbuilder_callback"),
+                       url('^$', views.NationBuilderConnectView.as_view(), name="connect"),
+                       url('callback', views.NationBuilderConnectView.as_view(), name="callback"),
                        
                        # Examples:
                        # url(r'^$', 'gcanvas.views.home', name='home'),

@@ -4,13 +4,13 @@ from django.conf.urls import patterns, include, url
 #admin.autodiscover()
 
 urlpatterns = patterns('',
-                       url(r'^nationbuilder', include('nationbuilder_connect.urls')),
-                       url(r'^register', include('email_verification.urls')),
-                       url(r'^twitter', include('twitter_authenticate.urls')),
-                       url(r'^accounts', include('gcanvas_user.urls')),
-                       url(r'^json', include('json_handler.urls')),
+                       url(r'^nationbuilder', include('nationbuilder_connect.urls', namespace='nationbuilder')),
+                       url(r'^register', include('email_verification.urls', namespace='register')),
+                       url(r'^twitter', include('twitter_authenticate.urls', namespace='twitter')),
+                       url(r'^accounts', include('gcanvas_user.urls', namespace='accounts')),
+                       url(r'^json', include('json_handler.urls', namespace='json')),
                        url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
-                       #url(r'.*', include('static_server.urls')),
+                       url(r'.*', include('static_server.urls')),
                        
                        # Examples:
                        # url(r'^$', 'gcanvas.views.home', name='home'),

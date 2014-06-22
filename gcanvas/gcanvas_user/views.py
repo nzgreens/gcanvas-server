@@ -1,8 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from django.views.generic import View
 
-#from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse
 from django.http import HttpResponse, Http404
 
 from django.contrib.auth.models import User
@@ -47,3 +47,8 @@ class GCanvasUserView(View):
 
     def delete(self, request, *args, **kwargs):
         return HttpResponse('{"status": "todo"}')
+
+
+class GCanvasLoginView(View):
+    def get(self, request, *args, **kwargs):
+        return redirect(reverse('nationbuilder:connect'))

@@ -5,7 +5,7 @@ from .base import *
 #DJANGO_SETTINGS_MODULE=gcanvas.settings.local
 #DJANGO_SECRET_KEY=`generate_secret_key.sh`
 
-
+NATIONBUILDER_CLIENT_CALLBACK='http://127.0.0.1:8000/nationbuilder/callback'
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG

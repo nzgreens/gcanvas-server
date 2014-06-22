@@ -18,6 +18,9 @@ DATABASES = {
     "default": dj_database_url.config()
 }
 
+NATIONBUILDER_CLIENT_ID='92a6946dd65005738232de85da413892d9b714441917ccea6641427a147c6e5e'
+NATIONBUILDER_CLIENT_SECRET='6e7cd58f2ec94b44f9adc1099e7f4c4ac95d9c61a5ecf55c1b7f77db3209bd72'
+NATIONBUILDER_CLIENT_NAME='gCanvas'
 
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
@@ -86,6 +89,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'oauth2_provider.middleware.OAuth2TokenMiddleware',
 )
 
 ROOT_URLCONF = 'gcanvas.urls'
@@ -115,6 +119,5 @@ STATIC_URL = '/static/'
 
 AUTHENTICATION_BACKENDS = (
     # ... your other backends
-    #'twitter_authenticate.auth_backend.TwitterAuthBackend',
-    'nationbuilder_connect.auth_backend.NationBuilderAuthBackend',
+    'twitter_authenticate.auth_backend.TwitterAuthBackend',
 )

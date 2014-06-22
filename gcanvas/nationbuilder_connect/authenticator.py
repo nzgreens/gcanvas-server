@@ -54,23 +54,33 @@ class OAuthSession(object):
 
     
     #assumes api return JSON data
-    def get_api_json_data(self, token, api):
+    def get_api_json_data(self, token, api, **kwargs):
         session = self._service.get_session(token)
+        kwargs.update({'format': 'json'})
         return session.get("https://%s%s" % (self._base_url, api),
-                           params={'format': 'json'},
-                           headers={'content-type': 'application/json'})
+                           params=kwargs,
+                           headers={'content-type': 'application/json'}).json()
 
 
     def whoami(self, token):
         return self.get_api_json_data(token, '/api/v1/people/me')
 
 
+
+    def get_lists(self, token):
+        result = self.get_api_json_data(token, '/api/v1/lists', {'per_page': 100})
+        pages = [result]
+        while 'page' in result and int(result['page']) < int(result['total_pages']):
+            page = int(result['page'])
+            result = self.get_api_json_data(token, '/api/v1/lists', {'page': page+1, 'per_page': 100})
+            pages.append(result)
+
+        return [result for page in pages for result in page['results']]
     
 
 class NationUserManager(object):
     def create_nation_user(self, oauthsession, oauth_token):
-        print(oauth_token)
-        profile_json = oauthsession.whoami(oauth_token).json()
+        profile_json = oauthsession.whoami(oauth_token)
         nation_id = profile_json['person']['id']
         email = profile_json['person']['email']
         firstname = profile_json['person']['first_name']
@@ -95,6 +105,8 @@ class NationUserManager(object):
     def login(self, request, nation_id):
         user = authenticate(nation_user_id=nation_id)
         login(request, user)
+
+        return user != None
 
 
     def logout(self, request):
