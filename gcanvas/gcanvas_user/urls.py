@@ -7,7 +7,8 @@ from . import views
 
 urlpatterns = patterns('',
                        url('user.json$', views.GCanvasUserView.as_view(), name="user"),
-                       url('login/.*', views.GCanvasLoginView.as_view(), name="login")
+                       url('login/.*', views.GCanvasLoginView.as_view(), name="login"),
+                       url('register/.*', views.GCanvasRegisterView.as_view(), name="register"),
                        
                        
                        # Examples:

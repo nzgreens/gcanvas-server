@@ -31,8 +31,7 @@ class NationBuilderConnectView(View):
             if 'code' in request.GET:
                 code = request.GET['code']
                 token = self._oauthsession.get_access_token(code)
-                print(token)
-                
+                                
                 nationuser = self._nationmanager.create_nation_user(self._oauthsession, token)
                 self._nationmanager.login(request, nationuser.nation_user_id)
                 
@@ -44,7 +43,7 @@ class NationBuilderConnectView(View):
             return redirect(self._oauthsession.get_authorisation_url())
 
         #@TODO: fix this up to stop a neverending loop of redirects.
-        return redirect(reverse('accounts:login'))
+        return redirect(reverse('app:main'))
 
 
 class NationBuilderListsView(View):
@@ -64,4 +63,4 @@ class NationBuilderListsView(View):
 
     def get(self, request, *args, **kwargs):
         
-        self._oauthsession.get_lists
+        self._oauthsession.get_lists()
