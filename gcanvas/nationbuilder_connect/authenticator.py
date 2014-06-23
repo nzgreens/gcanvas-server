@@ -90,16 +90,32 @@ class NationUserManager(object):
         if User.objects.filter(username=username).count():
             user = User.objects.get(username=username)
         else:
+            #alright, they have verified themselves on NationBuilder, but no user has been created this end
+            #not sure how this happened, so we'll just create a new user and wait for them to give it a password
+            #@TOTO: autogenerate a password, and email it to the user using the email gained from NationBuilder.
             user = User.objects.create_user(username, email, '')
+            #however for the moment, we just make sure the account can't be used till a password has been set
+            #thus stopping others from using this id unauthorised
+            user.set_unusable_password()
+
         user.first_name = firstname
         user.last_name = lastname
-        user.set_unusable_password()
+        user.email = email
         user.save()
+
         nationuser, _ = NationBuilderUser.objects.get_or_create(nation_user_id=nation_id, user=user)
         nationuser.oauth_token = oauth_token
         nationuser.save()
 
         return nationuser
+
+
+    def is_nation_user(self, user):
+        return User.objects.filter(username=username).count() > 0
+
+
+    def get_nation_user(self, user):
+        return NationBuilderUser.objects.get(user=user)
 
 
     def login(self, request, nation_id):

@@ -1,6 +1,7 @@
 import json
 
 from django.shortcuts import render, redirect
+from django.core.urlresolvers import reverse
 from django.views.generic import View
 from django.http import HttpResponse, Http404
 from django.conf import settings
@@ -38,13 +39,12 @@ class NationBuilderConnectView(View):
                 return redirect('/')
             else:
                 return HttpResponse(json.dumps(request.GET), content_type='application/json')
-        #token = 'fad163beeb0d92277a174c7b6979191d2f0d153fa9fae216e66e75418976d9ae'
-        #api = '/api/v1/lists?per_page=100'
-        #response = self._oauthsession.get_api_json_data(token, api)
         
-        return redirect(self._oauthsession.get_authorisation_url()) #HttpResponse(response, content_type="application/json")
+        if request.user.is_authenticated() and not self._nationmanager.is_nation_user(request.user):
+            return redirect(self._oauthsession.get_authorisation_url())
 
-
+        #@TODO: fix this up to stop a neverending loop of redirects.
+        return redirect(reverse('accounts:login'))
 
 
 class NationBuilderListsView(View):
