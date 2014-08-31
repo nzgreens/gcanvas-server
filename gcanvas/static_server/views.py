@@ -12,9 +12,17 @@ class GCanvasView(View):
         try:
             
             if path.endswith('png'):
-                print(path)
                 with open('build/web%s' % (path), 'rb') as p:
                     return HttpResponse(p.read(), mimetype="image/png")
+            elif path.endswith('jpg'):
+                with open('build/web%s' % (path), 'rb') as p:
+                    return HttpResponse(p.read(), mimetype="image/jpeg")
+            elif path.endswith('js'):
+                with open('build/web%s' % (path), 'rb') as p:
+                    return HttpResponse(p.read(), mimetype="text/javascript")
+            elif path.endswith('dart'):
+                with open('build/web%s' % (path), 'rb') as p:
+                    return HttpResponse(p.read(), mimetype="application/dart")
             else:
                 with open('build/web%s' % (path)) as p:
                     return HttpResponse(p.read())

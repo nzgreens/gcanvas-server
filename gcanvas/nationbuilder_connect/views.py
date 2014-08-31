@@ -39,11 +39,11 @@ class NationBuilderConnectView(View):
             else:
                 return HttpResponse(json.dumps(request.GET), content_type='application/json')
         
-        if request.user.is_authenticated() and not self._nationmanager.is_nation_user(request.user):
+        if not request.user.is_authenticated() or not self._nationmanager.is_nation_user(request.user):
             return redirect(self._oauthsession.get_authorisation_url())
 
         #@TODO: fix this up to stop a neverending loop of redirects.
-        return redirect(reverse('app:main'))
+        return redirect(reverse('app:main'), register=True, permanent=True)
 
 
 class NationBuilderListsView(View):

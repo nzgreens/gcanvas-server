@@ -120,7 +120,8 @@ class NationUserManager(object):
 
     def login(self, request, nation_id):
         user = authenticate(nation_user_id=nation_id)
-        login(request, user)
+        if user != None:
+            login(request, user)
 
         return user != None
 

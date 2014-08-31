@@ -56,7 +56,7 @@ class GCanvasRegisterView(View):
         """
         Starts user down the registration path for NationBuilder
         """
-        return redirect(reverse('nationbuilder:connect'))
+        return redirect(reverse('app:main'))
 
 
     def post(self, request, *args, **kwargs):
@@ -93,8 +93,8 @@ class GCanvasLoginView(View):
                     '{"status": "authenticated", "verified": %s, "username": "%s", firstname": "%s", "lastname": "%s", "email": "%s"}' % 
                     (str(verified).lower(),
                      user.username,
-                     user.first_name, 
-                     user.last_name, 
+                     user.first_name,
+                     user.last_name,
                      user.email),
                     content_type='application/json')
 
