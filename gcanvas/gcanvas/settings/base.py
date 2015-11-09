@@ -14,13 +14,11 @@ from django.core.exceptions import ImproperlyConfigured
 from unipath import Path
 import dj_database_url
 
+LOGGING_CONFIG="logging.config.dictConfig"
+
 DATABASES = {
     "default": dj_database_url.config()
 }
-
-NATIONBUILDER_CLIENT_ID='92a6946dd65005738232de85da413892d9b714441917ccea6641427a147c6e5e'
-NATIONBUILDER_CLIENT_SECRET='6e7cd58f2ec94b44f9adc1099e7f4c4ac95d9c61a5ecf55c1b7f77db3209bd72'
-NATIONBUILDER_CLIENT_NAME='gCanvas'
 
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
@@ -29,10 +27,10 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Allow all host headers
 ALLOWED_HOSTS = ['*']
 
-def get_env_variable(var_name):
+def get_env_variable(var_name, default=None):
     """get the environment variable or return exception"""
     try:
-        return os.environ.get(var_name)
+        return os.environ.get(var_name, default=default)
     except KeyError:
         error_msg = "Set the %s environment variable" % (var_name)
         raise ImproperlyConfigured(error_msg)
@@ -55,6 +53,7 @@ TEMPLATE_DIRS = (
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
+print (SECRET_KEY)
 
 TWITTER_CLIENT_ID='lz3KLlOaekxeuRkngh0V9BdLZ'
 TWITTER_CLIENT_SECRET='8AHFZo1KEfXh7v4r4SHnT67kOdSFMJAI7iHR78U6wSQBA8gmZ5'
@@ -67,6 +66,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 INSTALLED_APPS = (
+    'gcanvas_user',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -78,8 +78,7 @@ INSTALLED_APPS = (
     'json_handler',
     'twitter_authenticate',
     'email_verification',
-    'gcanvas_user',
-    'nationbuilder_connect',
+    'gunicorn',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -92,6 +91,8 @@ MIDDLEWARE_CLASSES = (
     'oauth2_provider.middleware.OAuth2TokenMiddleware',
 )
 
+CSRF_COOKIE_SECURE = True
+
 ROOT_URLCONF = 'gcanvas.urls'
 
 WSGI_APPLICATION = 'gcanvas.wsgi.application'
@@ -102,7 +103,7 @@ WSGI_APPLICATION = 'gcanvas.wsgi.application'
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'GMT'
 
 USE_I18N = True
 
@@ -117,7 +118,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-AUTHENTICATION_BACKENDS = (
+#AUTHENTICATION_BACKENDS = (
     # ... your other backends
-    'twitter_authenticate.auth_backend.TwitterAuthBackend',
-)
+#    'twitter_authenticate.auth_backend.TwitterAuthBackend',
+#)
+
+AUTH_USER_MODEL = 'gcanvas_user.GCanvasUser'

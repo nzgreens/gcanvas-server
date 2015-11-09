@@ -10,20 +10,21 @@ from django.http import HttpResponse, Http404
 
 from .models import EmailVerified
 
+from .verify import Verifier
 
 #TODO: create a view to recieve a code sent by email to verify email has been recieved
 #this is a REST server
 class EmailVerifierRESTView(View):
     def __init__(self, *args, **kwargs):
-        #self._verifier = Verifier()
+        self._verifier = Verifier()
         
-        super(EmailVerifierRESTView, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     #request email verification
     def post(self, request, *args, **kwargs):
         verify_object = EmailVerified.objects.get_or_create(user=request.user, code=str(uuid.uuid1()))
         if verify_object.valid == True and self._verifier.validate(request.user.email):
-            name = "%s %s" % (request.user.first_name, request.user.last_name)
+            name = "%s %s" % (request.user.firstname, request.user.lastname)
             verfication_url = request.build_absolute_uri('#%s' % (verify_object.code))
             self._validate.send_verification_code(self, name, request.user.email, verfication_url) 
         elif verify_object.valid == True:

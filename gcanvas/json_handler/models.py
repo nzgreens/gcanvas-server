@@ -1,5 +1,6 @@
 from django.db import models
 
+import uuid
 
 class Address(models.Model):
     address1 = models.CharField(max_length=50)
@@ -14,7 +15,7 @@ class Address(models.Model):
 
 
 class People(models.Model):
-    nation_id = models.IntegerField(unique=True)
+    nation_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     occupation = models.CharField(max_length=50)

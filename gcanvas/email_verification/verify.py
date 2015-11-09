@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
-from mailgun_validation.validators import validate_email
+#bfrom mailgun_validation.validators import validate_email
 
 from .models import EmailVerified
 
@@ -10,13 +10,13 @@ class Verifier(object):
 
     def validate(self, email):
         try:
-            validate_email(email)
+            #validate_email(email)
 
             return True
         except:
             return False
 
-    def send_verification_code(self, username, to_email, verfication_url, from_email='james.hurford@greens.org.nz'):
+    def send_verification_code(self, username, to_email, verfication_url, from_email='terraundersea@gmail.com'):
         message = """
         Hi %s
 
