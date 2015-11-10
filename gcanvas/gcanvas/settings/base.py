@@ -53,7 +53,6 @@ TEMPLATE_DIRS = (
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
-print (SECRET_KEY)
 
 TWITTER_CLIENT_ID='lz3KLlOaekxeuRkngh0V9BdLZ'
 TWITTER_CLIENT_SECRET='8AHFZo1KEfXh7v4r4SHnT67kOdSFMJAI7iHR78U6wSQBA8gmZ5'

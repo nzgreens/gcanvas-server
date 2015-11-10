@@ -1,7 +1,7 @@
 {"results": [
 {% for person in people %}
     {
-        "id": {{ person.nation_id }},
+        "id": {{ person.id }},
         "first_name": "{{ person.first_name }}",
         "last_name": "{{ person.last_name }}",
         "occupation": "{{ person.occupation }}",
