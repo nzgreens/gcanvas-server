@@ -3,5 +3,5 @@ from . import views
 
 urlpatterns = patterns('',
                        url('^$', views.GCanvasView.as_view(), name='main'),
-                       #static('/', document_root=settings.STATIC_ROOT)
+                       #static('^$', document_root=settings.STATIC_ROOT, name='main')
                    )

@@ -9,7 +9,7 @@ from .base import *
 
 DEBUG = True
 ALLOWED_HOSTS = ['*']
-TEMPLATE_DEBUG = DEBUG
+#TEMPLATE_DEBUG = DEBUG
 
 #overcomes the not configured bug
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
@@ -30,6 +30,5 @@ DATABASES = {
 
 
 INSTALLED_APPS += (
-    "debug_toolbar",
     "django_extensions",
 )

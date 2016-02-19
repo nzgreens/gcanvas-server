@@ -1,11 +1,11 @@
 Django
 psycopg2
-South
 Unipath
 dj-database-url
 django-toolbelt
 django-oauth-toolkit
-git+https://github.com/terrasea/requests.git
+django-cors-headers
+requests
 rauth
 requests_oauthlib
 oauthlib

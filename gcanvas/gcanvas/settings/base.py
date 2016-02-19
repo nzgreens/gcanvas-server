@@ -44,9 +44,30 @@ STATICFILES_DIRS = (
     BASE_DIR.child('build').child('web'),
 )
 
-TEMPLATE_DIRS = (
-    BASE_DIR.child('templates'),
-)
+#TEMPLATE_DIRS = (
+#    BASE_DIR.child('templates'),
+#)
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            BASE_DIR.child('templates'),
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                "django.contrib.auth.context_processors.auth",
+                "django.template.context_processors.debug",
+                "django.template.context_processors.i18n",
+                "django.template.context_processors.media",
+                "django.template.context_processors.static",
+                "django.template.context_processors.tz",
+                "django.contrib.messages.context_processors.messages"
+            ]
+        },
+    },
+]
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -62,6 +83,7 @@ USER_REGISTER_URL='/'
 
 ALLOWED_HOSTS = []
 
+#CSRF_COOKIE_DOMAIN = "*"
 
 # Application definition
 INSTALLED_APPS = (
@@ -73,12 +95,16 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'oauth2_provider',
+    'corsheaders',
     'static_server',
     'json_handler',
     'twitter_authenticate',
     'email_verification',
     'gunicorn',
+    
 )
+
+#context_processors
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -88,9 +114,13 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'oauth2_provider.middleware.OAuth2TokenMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
 )
 
-CSRF_COOKIE_SECURE = True
+CORS_ORIGIN_ALLOW_ALL = True
+
+
+#CSRF_COOKIE_SECURE = True
 
 ROOT_URLCONF = 'gcanvas.urls'
 
@@ -123,3 +153,9 @@ STATIC_URL = '/static/'
 #)
 
 AUTH_USER_MODEL = 'gcanvas_user.GCanvasUser'
+
+DOMAIN = "testing"
+HOST="testing2"
+EMAIL_HOST="email"
+
+LOGIN_URL="/"

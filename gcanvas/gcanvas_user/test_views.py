@@ -1,9 +1,12 @@
 import json
 
+from django.test.utils import setup_test_environment
 from django.core.urlresolvers import reverse
 from django.test import TestCase, override_settings
 from django.utils.http import urlencode, urlquote
 from django.core.mail import send_mail, outbox
+
+import django.core.mail as mail
 
 from gcanvas_user.models import GCanvasUser, GCanvasUserManager, GCanvasUserVerification
 from django.contrib.auth import get_user_model
@@ -11,6 +14,7 @@ from django.contrib.auth import get_user_model
 class GCanvasUserTests(TestCase):
     @override_settings(AUTH_USER_MODEL='gcanvas_user.GCanvasUser')
     def setUp(self):
+        setup_test_environment()
         model = get_user_model()
         user1 = model.objects.create_user("testuser", firstname="test", lastname="user", email="testuser@gcanvasuser", password="password")
         user1.validated = False
@@ -187,28 +191,14 @@ class GCanvasUserTests(TestCase):
     def test_registering_user_sends_email(self):
         post = json.dumps({"username": "username5", "firstname": "user2", "lastname": "user2", "email": "testuser5@gcanvasuser", "password": "pass"})
 
-        response = self.client.post(self.register_user_url, post, "application/json")
+        self.client.post(self.register_user_url, post, "application/json")
 
-        data = response.content.decode()
-        data = json.loads(data)
+        user5 = get_user_model().objects.get(username='username5')
+        user_verification = GCanvasUserVerification.objects.get(user=user5)
 
-        content = {"status": "registered"}
+        verify_user_url = reverse("accounts:verification", args=(user_verification.code.hex,))
 
-
-        print(str(outbox))
-
-        self.assertEquals(data, content)
-
-
-
-    def test_send_email(self):
-        # Send message.
-        send_mail('Subject here', 'Here is the message.',
-            'from@example.com', ['to@example.com'],
-            fail_silently=False)
-
-        # Test that one message has been sent.
-        self.assertEqual(len(outbox), 1)
-
-        # Verify that the subject of the first message is correct.
-        self.assertEqual(mail.outbox[0].subject, 'Subject here')
+        self.assertEquals(len(mail.outbox), 1)
+        self.assertEquals(mail.outbox[0].subject, "gCanvas Email verification")
+        self.assertEquals(mail.outbox[0].to, ["testuser5@gcanvasuser"])
+        self.assertTrue(mail.outbox[0].message().as_string().find(verify_user_url) > 0)

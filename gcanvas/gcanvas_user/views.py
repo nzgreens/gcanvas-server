@@ -1,34 +1,33 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404
 
 from django.views.generic import View
 
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
 
 from django.core.mail import send_mail
 
 from django.contrib.auth import get_user_model
-from django.contrib.auth import authenticate, login
-from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import authenticate, login, logout
 from django.middleware.csrf import get_token
-from django.http import QueryDict
-from  django.db.utils import IntegrityError
+from django.db.utils import IntegrityError
 
-from .models import *
+from .models import GCanvasUserVerification
 
-import os
 import json
-import datetime
 import logging
 
+
 class GCanvasUserView(View):
-    #query status
     def get(self, request, *args, **kwargs):
-        logging.error("user.json")
-        if request.user.is_authenticated() and request.user.validated == True:
+        """
+        query status
+        """
+        if request.user.is_authenticated() is True and \
+           request.user.validated is True:
             verified = request.user.validated
             jsonStr = '{"status": "authenticated", "verified": %s, "username": "%s", "firstname": "%s", "lastname": "%s", "email": "%s"}' % (str(verified).lower(), str(request.user.username), request.user.firstname, request.user.lastname, request.user.email)
-                
+            logging.error('user.json')
             return HttpResponse(
                 jsonStr,
                 content_type='application/json')
@@ -71,7 +70,7 @@ class GCanvasRegisterView(View):
         #@TODO: create a new user or set a password for it, setting that user as able to use password
 
         data = json.loads(request.read().decode());
-        logging.error(data)
+        
         try:
           user = get_user_model().objects.create_user(data['username'], data['firstname'], data['lastname'], data['email'], password=data['password'])
           verify_code, _ = GCanvasUserVerification.objects.get_or_create(user=user)
@@ -122,7 +121,7 @@ class GCanvasLoginView(View):
         Authenticate and login user
         """
         data = json.loads(request.read().decode())
-        logging.error(data)
+        
         if 'username' in data.keys() and 'password' in data.keys():
             user = authenticate(username=data['username'], password=data['password'])
             if user != None and user.validated:
@@ -138,8 +137,18 @@ class GCanvasLoginView(View):
 
         return HttpResponse('{"status": "unauthenticated"}',
                             content_type='application/json')
-        
 
+    
+class GCanvasLogoutView(View):
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        """
+        Redirects user to login page
+        """
+        return redirect(reverse('app:main'))
+
+
+    
 
 class GCanvasVerificationView(View):
   def get(self, request, code, *args, **kwargs):
